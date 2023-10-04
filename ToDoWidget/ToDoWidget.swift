@@ -37,12 +37,14 @@ struct ToDoWidgetEntryView : View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("ToDo Items")
+                .foregroundColor(.white)
                 .fontWeight(.bold)
                 .padding(.bottom, 5)
                 .frame(maxWidth: .infinity, alignment: .center)
             
             if entry.toDoDisplay.isEmpty {
                 Text("ToDos Completed")
+                    .foregroundColor(.white)
             } else {
                 ForEach(entry.toDoDisplay) { toDo in
                     HStack {
@@ -52,6 +54,7 @@ struct ToDoWidgetEntryView : View {
                         }.buttonStyle(.plain)
                         
                         Text(toDo.name)
+                            .foregroundColor(.white)
                             .textScale(.secondary)
                             .lineLimit(1)
                             .strikethrough(toDo.isDone)
@@ -68,13 +71,14 @@ struct ToDoWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            if #available(iOS 17.0, *) {
-                ToDoWidgetEntryView(entry: entry)
-                    .containerBackground(.fill.tertiary, for: .widget)
-            } else {
-                ToDoWidgetEntryView(entry: entry)
-                    .padding()
-                    .background()
+            ZStack {
+                if #available(iOS 17.0, *) {
+                    ToDoWidgetEntryView(entry: entry)
+                        .containerBackground(.foreground, for: .widget)
+                } else {
+                    ToDoWidgetEntryView(entry: entry)
+                        .background()
+                }
             }
         }
         .configurationDisplayName("ToDo Widget")
